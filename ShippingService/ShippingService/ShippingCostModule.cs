@@ -6,6 +6,10 @@ using System.Web;
 
 namespace ShippingService
 {
+	/// <summary>
+	/// Responsible for obtaining a shipping cost given customer postal code, plus
+	/// the package's total size and weight.
+	/// </summary>
 	public class ShippingCostModule : NancyModule
 	{
 		public ShippingCostModule()
