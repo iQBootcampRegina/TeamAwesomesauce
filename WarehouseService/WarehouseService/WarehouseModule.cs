@@ -9,8 +9,11 @@ namespace WarehouseService
 {
 	public class WarehouseModule : NancyModule
 	{
+		private Random RNG;
 		public WarehouseModule()
 		{
+			RNG = new Random();
+			
 			Nancy.StaticConfiguration.DisableErrorTraces = false;
 
 			Get["/Product/{id}/Location"] = x => GetLocationForProduct(x.id);
@@ -20,8 +23,8 @@ namespace WarehouseService
 		{
 			return new
 				{
-					Row = new Random().Next(1000),
-					Shelf = new Random().Next(1000),
+					Row = RNG.Next(1000),
+					Shelf = RNG.Next(1000),
 				};
 
 		}
