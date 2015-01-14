@@ -15,8 +15,8 @@ namespace PaymentService
 		{
 			_orderIDToPaymentIDLookup = new Dictionary<Guid, Guid>();
 
-			Post["/"] = x => SubmitPayment();
-			Get["/"] = x => GetPayment();
+			Post["/payment/submit"] = x => SubmitPayment();
+			Get["/payment({id})"] = x => GetPayment();
 		}
 
 		public object GetPayment()
@@ -56,42 +56,5 @@ namespace PaymentService
 				         .WithModel(new PaymentResponse() { OrderID = request.OrderID, PaymentConfirmationNumber = null})
 						 .WithReasonPhrase("Invalid information provided.");
 		}
-	}
-
-	public class GetPaymentRequest
-	{
-		public Guid OrderID { get; set; }
-	}
-
-	public class SubmitPaymentRequest
-	{
-		public Guid OrderID { get; set; }
-
-		public string Address { get; set; }
-		public string City { get; set; }
-		public string Province { get; set; }
-		public string PostalCode { get; set; }
-
-		public string CardholderName { get; set; }
-		public string CreditCardNumber { get; set; }
-		public string CCV { get; set; }
-		public string Expiry { get; set; }
-
-		public decimal Amount { get; set; }
-
-		public bool IsValid()
-		{
-			return !string.IsNullOrEmpty(Address) && !string.IsNullOrEmpty(City)
-			       && !string.IsNullOrEmpty(Province) && !string.IsNullOrEmpty(PostalCode)
-				   && !string.IsNullOrEmpty(CardholderName) && !string.IsNullOrEmpty(CreditCardNumber)
-				   && !string.IsNullOrEmpty(CCV) && !string.IsNullOrEmpty(Expiry)
-				   && Amount > 0.0m;
-		}
-	}
-
-	public class PaymentResponse
-	{
-		public Guid OrderID { get; set; }
-		public Guid? PaymentConfirmationNumber { get; set; }
 	}
 }
