@@ -19,6 +19,7 @@ namespace CartService
 		{
 			Post["/Carts"] = x => CreateCart();
 			Post["/Carts/{id}/Products"] = x => AddProductToCart(x.id);
+			Get["/Carts/{id}"] = x => GetCartById(x.id);
 			Delete["/Carts/{id}/Products/{productId}"] = x => RemoveProductFromCart(x.id, x.productId);
 
 		}
@@ -30,7 +31,7 @@ namespace CartService
 		/// <returns></returns>
 		private object RemoveProductFromCart(Guid id, Guid productId)
 		{
-			CartModel cart = GetCartById(id);
+			CartModel cart = (CartModel) GetCartById(id);
 			if (cart != null)
 			{
 				cart.Products.Remove(cart.Products.FirstOrDefault(x => x.Equals(productId)));
@@ -45,9 +46,14 @@ namespace CartService
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
-		private CartModel GetCartById(Guid id)
+		private object GetCartById(Guid id)
 		{
-			return _carts.FirstOrDefault(x => x.id == id);
+			var cart =  _carts.FirstOrDefault(x => x.id == id);
+			if(cart != null)
+			{
+				return cart;
+			}
+			return HttpStatusCode.NotFound;
 
 		}
 		/// <summary>
@@ -58,7 +64,7 @@ namespace CartService
 		private object AddProductToCart(Guid id)
 		{
 			var request = this.Bind<AddProductRequest>();
-			var cart = GetCartById(id);
+			CartModel cart = (CartModel)GetCartById(id);
 			if (cart != null)
 			{
 				cart.Products.Add(request.productId);
