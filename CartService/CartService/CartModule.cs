@@ -19,7 +19,7 @@ namespace CartService
 		{
 			Post["/Carts"] = x => CreateCart();
 			Post["/Carts/{id}/Products"] = x => AddProductToCart(x.id);
-			Delete["/Carts/{id}/Products/{productId}"] = x => RemoveProductToCart(x.id, x.productId);
+			Delete["/Carts/{id}/Products/{productId}"] = x => RemoveProductFromCart(x.id, x.productId);
 
 		}
 
@@ -29,7 +29,7 @@ namespace CartService
 		/// <param name="id"></param>
 		/// <param name="productId"></param>
 		/// <returns></returns>
-		private object RemoveProductToCart(Guid id, Guid productId)
+		private object RemoveProductFromCart(Guid id, Guid productId)
 		{
 			CartModel cart = GetCartById(id);
 			cart.Products.Remove(cart.Products.FirstOrDefault(x => x.Equals(productId)));
