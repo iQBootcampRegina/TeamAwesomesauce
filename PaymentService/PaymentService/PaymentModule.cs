@@ -9,12 +9,10 @@ namespace PaymentService
 {
 	public class PaymentModule : NancyModule
 	{
-		private readonly Dictionary<Guid, Guid> _orderIDToPaymentIDLookup;
+		private static readonly Dictionary<Guid, Guid> _orderIDToPaymentIDLookup = new Dictionary<Guid, Guid>();
 
 		public PaymentModule()
 		{
-			_orderIDToPaymentIDLookup = new Dictionary<Guid, Guid>();
-
 			Post["/payment/submit"] = x => SubmitPayment();
 			Get["/payment({id})"] = x => GetPayment();
 		}
