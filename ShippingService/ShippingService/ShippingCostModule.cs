@@ -14,6 +14,8 @@ namespace ShippingService
 	{
 		public ShippingCostModule()
 		{
+			Nancy.StaticConfiguration.DisableErrorTraces = false;
+
 			Get["/"] = x => GetShippingCost(x.PostalCode, x.TotalSize, x.TotalWeight);
 		}
 

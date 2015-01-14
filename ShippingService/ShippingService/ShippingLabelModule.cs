@@ -13,6 +13,8 @@ namespace ShippingService
 	{
 		public ShippingLabelModule()
 		{
+			Nancy.StaticConfiguration.DisableErrorTraces = false;
+
 			Get["/"] = x => GetShippingLabel();
 		}
 
