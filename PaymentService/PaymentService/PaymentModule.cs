@@ -14,23 +14,22 @@ namespace PaymentService
 		public PaymentModule()
 		{
 			Post["/payment/submit"] = x => SubmitPayment();
-			Get["/payment({id})"] = x => GetPayment();
+			Get["/payment({id})"] = x => GetPayment(x.id);
 		}
 
-		public object GetPayment()
+		public object GetPayment(Guid orderId)
 		{
-			var request = this.Bind<GetPaymentRequest>();
-			if (!_orderIDToPaymentIDLookup.ContainsKey(request.OrderID))
+			if (!_orderIDToPaymentIDLookup.ContainsKey(orderId))
 				return
 					Negotiate.WithStatusCode(HttpStatusCode.NotFound)
-					         .WithModel(new PaymentResponse() {OrderID = request.OrderID, PaymentConfirmationNumber = null});
+							 .WithModel(new PaymentResponse() { OrderID = orderId, PaymentConfirmationNumber = null });
 
 			return
 				Negotiate.WithStatusCode(HttpStatusCode.OK)
 				         .WithModel(new PaymentResponse()
 					         {
-						         OrderID = request.OrderID,
-						         PaymentConfirmationNumber = _orderIDToPaymentIDLookup[request.OrderID]
+								 OrderID = orderId,
+								 PaymentConfirmationNumber = _orderIDToPaymentIDLookup[orderId]
 					         });
 		}
 
