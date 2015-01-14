@@ -66,6 +66,8 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dimensions.cs" />
+    <Compile Include="ProductModel.cs" />
     <Compile Include="ProductModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

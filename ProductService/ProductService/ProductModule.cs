@@ -11,6 +11,13 @@ namespace ProductService
 		public ProductModule()
 		{
 			Get["/Products"] = x => GetProducts();
+			Get["/Products/{id}"] = x => GetProductById(x.id);
+		}
+
+		private object GetProductById(Guid id)
+		{
+			//todo return from repo
+			return new ProductModel(id, "Your Product", 2, new Dimensions(3, 2, 1), 21.0m, 8);
 		}
 
 		private object GetProducts()
@@ -22,40 +29,5 @@ namespace ProductService
 					new ProductModel(new Guid("E755E52E-362C-498F-ACA2-13EF07A1C950"), "Product 3", 1, new Dimensions(15,2,3), 61.11m, 5), 
 			};
 		}
-	}
-
-	public class ProductModel
-	{
-		public ProductModel(Guid id, string name, int stock, Dimensions dimensions, decimal price, decimal weight)
-		{
-			ID = id;
-			Name = name;
-			Stock = stock;
-			Dimensions = dimensions;
-			Price = price;
-			Weight = weight;
-		}
-
-		public Guid ID { get; set; }
-		public string Name { get; set; }
-		public int Stock { get; set; }
-		public decimal Price { get; set; }
-		public Dimensions Dimensions { get; set; }
-		public decimal Weight { get; set; }
-	}
-
-	public class Dimensions
-	{
-		public Dimensions(decimal height, decimal width, decimal length)
-		{
-			Height = height;
-			Width = width;
-			Length = length;
-		}
-
-		public decimal Height { get; set; }
-		public decimal Width { get; set; }
-		public decimal Length { get; set; }
-
 	}
 }
