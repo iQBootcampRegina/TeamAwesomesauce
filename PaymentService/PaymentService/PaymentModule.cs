@@ -37,6 +37,9 @@ namespace PaymentService
 		public object SubmitPayment()
 		{
 			var request = this.Bind<SubmitPaymentRequest>();
+			if (_orderIDToPaymentIDLookup.ContainsKey(request.OrderID))
+				return Negotiate.WithStatusCode(HttpStatusCode.Conflict)
+								.WithModel(new PaymentResponse() { OrderID = request.OrderID, PaymentConfirmationNumber = _orderIDToPaymentIDLookup[request.OrderID] });
 
 			var result = request.IsValid();
 			if (result)
