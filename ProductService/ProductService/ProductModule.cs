@@ -12,9 +12,19 @@ namespace ProductService
 		{
 			Get["/Products"] = x => GetProducts();
 			Get["/Products/{id}"] = x => GetProductById(x.id);
+			Put["/Products/{id}/QuantityAdjustment/{amount}"] = x => AdjustAvailability(x.id, x.amount);
 		}
 
-		private object GetProductById(Guid id)
+		private object AdjustAvailability(Guid id, int amount)
+		{
+			ProductModel product = GetProductById(id);
+			product.Stock -= amount;
+			//Todo save dis thing
+
+			return Negotiate.WithModel(product).WithStatusCode(HttpStatusCode.OK);
+		}
+
+		private ProductModel GetProductById(Guid id)
 		{
 			//todo return from repo
 			return new ProductModel(id, "Your Product", 2, new Dimensions(3, 2, 1), 21.0m, 8);
