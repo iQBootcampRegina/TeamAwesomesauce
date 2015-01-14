@@ -25,15 +25,19 @@ namespace CartService
 
 		/// <summary>
 		/// 
-		/// </summary>
 		/// <param name="id"></param>
 		/// <param name="productId"></param>
 		/// <returns></returns>
 		private object RemoveProductFromCart(Guid id, Guid productId)
 		{
 			CartModel cart = GetCartById(id);
-			cart.Products.Remove(cart.Products.FirstOrDefault(x => x.Equals(productId)));
-			return HttpStatusCode.OK;
+			if (cart != null)
+			{
+				cart.Products.Remove(cart.Products.FirstOrDefault(x => x.Equals(productId)));
+				return HttpStatusCode.OK;
+			}
+			return HttpStatusCode.NotFound;
+			
 		}
 
 		/// <summary>
@@ -43,7 +47,7 @@ namespace CartService
 		/// <returns></returns>
 		private CartModel GetCartById(Guid id)
 		{
-			return _carts.First(x => x.id == id);
+			return _carts.FirstOrDefault(x => x.id == id);
 
 		}
 		/// <summary>
@@ -55,8 +59,12 @@ namespace CartService
 		{
 			var request = this.Bind<AddProductRequest>();
 			var cart = GetCartById(id);
-			cart.Products.Add(request.productId);
-			return HttpStatusCode.OK;
+			if (cart != null)
+			{
+				cart.Products.Add(request.productId);
+				return HttpStatusCode.OK;
+			}
+			return HttpStatusCode.NotFound;
 
 		}
 		/// <summary>
