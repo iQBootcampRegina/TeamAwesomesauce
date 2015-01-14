@@ -11,6 +11,8 @@ namespace WarehouseService
 	{
 		public WarehouseModule()
 		{
+			Nancy.StaticConfiguration.DisableErrorTraces = false;
+
 			Get["/Product/{id}/Location"] = x => GetLocationForProduct(x.id);
 		}
 
