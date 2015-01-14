@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Nancy.ModelBinding;
 
 namespace ShippingService
 {
@@ -15,13 +16,31 @@ namespace ShippingService
 		public ShippingCostModule()
 		{
 			Nancy.StaticConfiguration.DisableErrorTraces = false;
-
-			Get["/"] = x => GetShippingCost(x.PostalCode, x.TotalSize, x.TotalWeight);
+			Get["/cost"] = x => GetShippingCost();
 		}
 
-		public object GetShippingCost(string postalCode, decimal totalSize, decimal totalWeight)
+		public object GetShippingCost()
 		{
-			return 10.0m;
+			var request = this.Bind<ShippingQuoteParameters>();
+
+			return Negotiate.WithModel(new ShippingQuoteResult
+				{
+					Currency = "CAD",
+					Cost = Decimal.Round(0.025m * ((0.3m * request.TotalSize) + (0.7m * request.TotalWeight)), 2, MidpointRounding.AwayFromZero)
+				}).WithStatusCode(HttpStatusCode.OK);
 		}
+	}
+
+	public class ShippingQuoteParameters
+	{
+		public string PostalCode { get; set; }
+		public decimal TotalSize { get; set; }
+		public decimal TotalWeight { get; set; }
+	}
+
+	public class ShippingQuoteResult
+	{
+		public string Currency { get; set; }
+		public decimal Cost { get; set; }
 	}
 }
