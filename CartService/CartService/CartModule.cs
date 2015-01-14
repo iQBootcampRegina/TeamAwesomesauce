@@ -10,17 +10,25 @@ namespace CartService
 {
 	public class CartModule : NancyModule
 	{
-		private static List<CartModel> _carts  = new List<CartModel>();
+
+		//Nothing wrong with this.
+		private static readonly List<CartModel> _carts = new List<CartModel>();
 
 
 		public CartModule()
 		{
 			Post["/Carts"] = x => CreateCart();
-			Post["/Carts/{id}/Products"] = x =>AddProductToCart(x.id);
+			Post["/Carts/{id}/Products"] = x => AddProductToCart(x.id);
 			Delete["/Carts/{id}/Products/{productId}"] = x => RemoveProductToCart(x.id, x.productId);
 
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="productId"></param>
+		/// <returns></returns>
 		private object RemoveProductToCart(Guid id, Guid productId)
 		{
 			CartModel cart = GetCartById(id);
@@ -28,12 +36,21 @@ namespace CartService
 			return HttpStatusCode.OK;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 		private CartModel GetCartById(Guid id)
 		{
 			return _carts.First(x => x.id == id);
 
 		}
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 		private object AddProductToCart(Guid id)
 		{
 			var request = this.Bind<AddProductRequest>();
@@ -42,25 +59,15 @@ namespace CartService
 			return HttpStatusCode.OK;
 
 		}
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
 		private object CreateCart()
 		{
 			var cartModel = new CartModel() { id = new Guid(), Products = new List<Guid>() };
 			_carts.Add(cartModel);
 			return cartModel;
 		}
-	}
-
-	internal class AddProductRequest
-
-	{
-		public Guid productId { get; set; }
-	}
-
-	public class CartModel
-	{
-		public Guid id { get; set; }
-
-		public IList<Guid> Products { get; set; }
 	}
 }

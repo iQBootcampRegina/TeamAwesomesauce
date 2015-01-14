@@ -66,6 +66,8 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddProductRequest.cs" />
+    <Compile Include="CartModel.cs" />
     <Compile Include="CartModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
