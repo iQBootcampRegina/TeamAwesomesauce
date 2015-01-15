@@ -20,5 +20,12 @@ namespace PaymentService
 			base.CreateQueues(newConfigs);
 		}
 
+		protected override void RegisterQueueConsumers(IEnumerable<QueueConsumerConfiguration> consumerConfigurations)
+		{
+			var newConfigs = consumerConfigurations.Select(queueConsumerConfiguration => new QueueConsumerConfiguration(queueConsumerConfiguration.QueueName + ".Queue"));
+
+			base.RegisterQueueConsumers(newConfigs);
+		}
+
 	}
 }
