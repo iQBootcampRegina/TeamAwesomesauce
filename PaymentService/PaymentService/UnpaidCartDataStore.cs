@@ -5,16 +5,17 @@ using System.Web;
 
 namespace PaymentService
 {
+	/// <summary>
+	/// Stores a collection of unpaid carts and their associated amounts.
+	/// </summary>
 	public static class UnpaidCartDataStore
 	{
 		private static readonly Dictionary<Guid, decimal> _unpaidCarts = new Dictionary<Guid, decimal>();
-
-		public static IReadOnlyDictionary<Guid, decimal> UnpaidCarts { get { return _unpaidCarts; } }
-
+		
 		/// <summary>
-		/// Obtains the amount associated with the unpaid cart.  If no order, return null.
+		/// Gets the amount associated with the unpaid cart.  If no cart matches the specified ID, return null.
 		/// </summary>
-		/// <param name="cartID"></param>
+		/// <param name="cartID">The cart ID.</param>
 		/// <returns></returns>
 		public static decimal? GetAmount(Guid cartID)
 		{
@@ -27,8 +28,11 @@ namespace PaymentService
 		/// <summary>
 		/// Set the amount associated with an unpaid cart.
 		/// </summary>
-		/// <param name="cartID">Unpaid cart ID.</param>
+		/// <param name="cartID">The cart ID.</param>
 		/// <param name="amount">Amount due.</param>
+		/// <remarks>
+		/// This method creates a new unpaid cart if the ID does not already exist; otherwise, it updates the existing record.
+		/// </remarks>
 		public static void SetAmount(Guid cartID, decimal amount)
 		{
 			if (_unpaidCarts.ContainsKey(cartID))
@@ -41,7 +45,7 @@ namespace PaymentService
 		/// Pay for a cart.
 		/// </summary>
 		/// <param name="cartID">Cart ID.</param>
-		/// <returns></returns>
+		/// <returns>TRUE if the cart was successfully paid in full; otherwise, FALSE.</returns>
 		public static bool SetOrderAsPaid(Guid cartID)
 		{
 			return _unpaidCarts.Remove(cartID);
