@@ -1,4 +1,5 @@
-﻿using Nancy;
+﻿using IQ.Foundation.Messaging.AzureServiceBus;
+using Nancy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,12 @@ namespace ShippingService
 	/// </summary>
 	public class ShippingCostModule : NancyModule
 	{
+		public static void Main(string[] args)
+		{
+			var servicebusBootstrapper = new DefaultAzureServiceBusBootstrapper(new CartServiceSubscriberConfiguration());
+		}
+
+
 		public ShippingCostModule()
 		{
 			Nancy.StaticConfiguration.DisableErrorTraces = false;
