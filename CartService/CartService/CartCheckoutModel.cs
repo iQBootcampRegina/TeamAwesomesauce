@@ -3,7 +3,7 @@ using PaymentServiceMessageContracts;
 
 namespace CartService
 {
-	internal class CartCheckoutModel : INewUnpaidOrderMessage
+	public class CartCheckoutModel
 	{
 		public CartCheckoutModel(Guid id, decimal amountDue)
 		{

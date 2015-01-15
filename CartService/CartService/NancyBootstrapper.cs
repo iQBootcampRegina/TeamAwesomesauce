@@ -29,6 +29,7 @@ namespace CartService
 			bootstrapper.MessageHandlerRegisterer.Register<ShippingQuoteResult>(cartModule.ShippingPriceUpdateddHandler);
 			// Listen to cart payments complete
 			bootstrapper.MessageHandlerRegisterer.Register<IPaymentCompleteModel>(cartModule.PaymentCompletedHandler);
+			bootstrapper.Subscribe();
 		}
 
 	}
