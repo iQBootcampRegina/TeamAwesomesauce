@@ -26,12 +26,9 @@ namespace PaymentService.Configurations
 			}
 		}
 
-		protected override IEnumerable<string> SubscriptionTopics
+		protected override bool ConsumesQueue
 		{
-			get
-			{
-				yield return "TA.CartService";
-			}
+			get { return true; }
 		}
 	}
 }
