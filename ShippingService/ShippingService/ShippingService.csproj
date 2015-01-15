@@ -92,6 +92,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CartServiceSubscriberConfiguration.cs" />
+    <Compile Include="ProductAddedToCart.cs" />
+    <Compile Include="ProductRemovedFromCart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShippingCostModule.cs" />
     <Compile Include="ShippingLabelModule.cs" />
