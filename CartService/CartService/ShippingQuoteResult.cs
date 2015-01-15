@@ -2,15 +2,17 @@
 
 namespace CartService
 {
-	public class ShippingPriceModel
+	public class ShippingQuoteResult : IShippingQuoteResult
 	{
 		public Guid CartId { get; set; }
 		public decimal Price{ get; set; }
 
-		public ShippingPriceModel(Guid cartId, decimal price)
+		public ShippingQuoteResult(Guid cartId, decimal price)
 		{
 			CartId = cartId;
 			Price = price;
 		}
 	}
+
+
 }

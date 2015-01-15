@@ -95,14 +95,16 @@
     <Compile Include="CartModel.cs" />
     <Compile Include="CartModule.cs" />
     <Compile Include="CartUtils.cs" />
+    <Compile Include="IShippingQuoteResult.cs" />
     <Compile Include="MessageContracts\ICartPaymentResult.cs" />
+    <Compile Include="NancyBootstrapper.cs" />
     <Compile Include="PaymentCompletedModel.cs" />
     <Compile Include="ProductAddedToCart.cs" />
     <Compile Include="ProductInCart.cs" />
     <Compile Include="ProductRemovedFromCart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PublishUtility.cs" />
-    <Compile Include="ShippingPriceModel.cs" />
+    <Compile Include="ShippingQuoteResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

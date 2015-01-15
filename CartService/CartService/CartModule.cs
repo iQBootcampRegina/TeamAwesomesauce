@@ -19,42 +19,19 @@ namespace CartService
 		private static readonly List<CartModel> _carts = new List<CartModel>();
 		private static Dictionary<Guid, decimal> _shippingPrices = new Dictionary<Guid, decimal>();
 
-		public CartModule()
+		public CartModule(IPublishMessages publisher, IEnqueueMessages queue )
 		{
 			Post["/Carts"] = x => CreateCart();
 			Post["/Carts/{id}/Products"] = x => AddProductToCart(x.id);
 			Get["/Carts/{id}"] = x => GetCartById(x.id);
 			Delete["/Carts/{id}/Products/{productId}"] = x => RemoveProductFromCart(x.id, x.productId);
 			Post["/Carts/{id}/Checkout"] = x => CheckoutCart(x.id);
+			messagePublisher = publisher;
+			messageQueuePublisher = queue;
 
-
-			DefaultAzureServiceBusBootstrapper bootstrapper = new DefaultAzureServiceBusBootstrapper(new CartServiceConfiguration());
-			messagePublisher = bootstrapper.BuildMessagePublisher();
-
-			messageQueuePublisher = bootstrapper.BuildQueueProducer();
-			// Listen to Shipping info being received
-			bootstrapper.MessageHandlerRegisterer.Register<ShippingPriceModel>(ShippingPriceUpdateddHandler);
-			// Listen to cart payments complete
-			bootstrapper.MessageHandlerRegisterer.Register<ICartPaymentResult>(PaymentCompletedHandler);
 		}
 
 
-
-		/// <summary>
-		///
-		/// </summary>
-		/// <param name="message"></param>
-		private void ShippingPriceUpdateddHandler(ShippingPriceModel message)
-		{
-			if (_shippingPrices.ContainsKey(message.CartId))
-			{
-				_shippingPrices[message.CartId] = message.Price;
-			}
-			else
-			{
-				_shippingPrices.Add(message.CartId, message.Price);
-			}
-		}
 
 		/// <summary>
 		///
@@ -118,7 +95,7 @@ namespace CartService
 		///
 		/// </summary>
 		/// <param name="message"></param>
-		private void PaymentCompletedHandler(ICartPaymentResult message)
+		public void PaymentCompletedHandler(ICartPaymentResult message)
 		{
 			// Move cart to paid - notify it is paid
 			CartModel cartById = (CartModel)GetCartById(message.CartID);
@@ -129,6 +106,24 @@ namespace CartService
 			}
 
 		}
+
+
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="message"></param>
+		public void ShippingPriceUpdateddHandler(ShippingQuoteResult message)
+		{
+			if (_shippingPrices.ContainsKey(message.CartId))
+			{
+				_shippingPrices[message.CartId] = message.Price;
+			}
+			else
+			{
+				_shippingPrices.Add(message.CartId, message.Price);
+			}
+		}
+
 
 
 		/// <summary>
@@ -176,18 +171,23 @@ namespace CartService
 
 			var request = this.Bind<AddProductRequest>();
 			var cart = (CartModel)GetCartById(id);
-			if (cart != null)
+			Guid productId = request.ProductId;
+			if (cart != null && productId != Guid.Empty)
 			{
-				cart.Products.Add(request.productId);
+
+				cart.Products.Add(productId);
+						//Call Add product to cart
+
+			PublishUtility.PublishMessage(messagePublisher, new ProductAddedToCart(cart.id, productId));
 				return HttpStatusCode.OK;
 			}
-			//Call Add product to cart
 
-			PublishUtility.PublishMessage(messagePublisher, new ProductAddedToCart(cart.id, request.productId));
 
 			return HttpStatusCode.NotFound;
 
 		}
+
+
 		/// <summary>
 		/// 
 		/// </summary>
