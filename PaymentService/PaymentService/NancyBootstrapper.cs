@@ -18,7 +18,7 @@ namespace PaymentService
 		{
 			base.ApplicationStartup(container, pipelines);
 
-			var serviceBusBootStrapper = new DefaultAzureServiceBusBootstrapper(new MachineScopedServiceBusConfiguration(new PaymentSubscriberConfiguration()));
+			var serviceBusBootStrapper = new DefaultAzureServiceBusBootstrapper(new MachineScopedServiceBusConfiguration(new PaymentConfiguration()));
 
 			serviceBusBootStrapper.MessageHandlerRegisterer.Register<NewUnpaidOrderMessage>(HandlePaymentMessage);
 			serviceBusBootStrapper.Subscribe();

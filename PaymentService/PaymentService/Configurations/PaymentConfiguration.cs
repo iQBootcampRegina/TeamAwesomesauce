@@ -6,7 +6,7 @@ using IQ.Foundation.Messaging.AzureServiceBus.Configuration;
 
 namespace PaymentService.Configurations
 {
-	public class PaymentSubscriberConfiguration : ConventionServiceBusConfiguration
+	public class PaymentConfiguration : ConventionServiceBusConfiguration
 	{
 		public override string ConnectionString
 		{
@@ -15,14 +15,22 @@ namespace PaymentService.Configurations
 
 		public override string ServiceIdentifier
 		{
-			get { return "Boreal.PaymentSubscriber"; }
+			get { return "TA.PaymentService"; }
+		}
+
+		protected override bool PublishesMessages
+		{
+			get
+			{
+				return true;
+			}
 		}
 
 		protected override IEnumerable<string> SubscriptionTopics
 		{
 			get
 			{
-				yield return "Boreal.PaymentPublisher";
+				yield return "TA.CartService";
 			}
 		}
 	}

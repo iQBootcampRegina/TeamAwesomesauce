@@ -2,59 +2,59 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using IQ.Foundation.Messaging;
+using IQ.Foundation.Messaging.AzureServiceBus;
 using Nancy;
 using Nancy.ModelBinding;
+using PaymentService.Configurations;
+using PaymentService.Messages;
 
 namespace PaymentService
 {
-	/*public class PaymentModule : NancyModule
+	public class PaymentModule : NancyModule
 	{
-		//private static readonly Dictionary<Guid, decimal> _unpaidCarts = new Dictionary<Guid, decimal>();
+		IPublishMessages messagePublisher;
 
-		/*public PaymentModule()
+		public PaymentModule()
 		{
 			Post["/payment/submit"] = x => SubmitPayment();
-			Get["/payment({id})"] = x => GetPayment(x.id);
+
+			DefaultAzureServiceBusBootstrapper bootstrapper = new DefaultAzureServiceBusBootstrapper(new PaymentConfiguration());
+			messagePublisher = bootstrapper.BuildMessagePublisher();
 		}
 
-		public object GetPayment(Guid orderId)
+
+		public object SubmitPayment()
 		{
-			/*if (!_orderIDToPaymentIDLookup.ContainsKey(orderId))
-				return
-					Negotiate.WithStatusCode(HttpStatusCode.NotFound)
-							 .WithModel(new PaymentResponse() { OrderID = orderId, PaymentConfirmationNumber = null });
-
-			return
-				Negotiate.WithStatusCode(HttpStatusCode.OK)
-				         .WithModel(new PaymentResponse()
-					         {
-								 OrderID = orderId,
-								 PaymentConfirmationNumber = _orderIDToPaymentIDLookup[orderId]
-					         });*/
-		//}
-
-		/*public object SubmitPayment()
-		{
-			/*var request = this.Bind<SubmitPaymentRequest>();
-			if (_orderIDToPaymentIDLookup.ContainsKey(request.OrderID))
-				return Negotiate.WithStatusCode(HttpStatusCode.Conflict)
-								.WithModel(new PaymentResponse() { OrderID = request.OrderID, PaymentConfirmationNumber = _orderIDToPaymentIDLookup[request.OrderID] });
-
-			var result = request.IsValid();
-			if (result)
+			var request = this.Bind<SubmitPaymentMessage>();
+			if (UnpaidCartDataStore.UnpaidCarts.ContainsKey(request.CartID))
 			{
-				var paymentID = Guid.NewGuid();
-				_orderIDToPaymentIDLookup.Add(request.OrderID, paymentID);
-
-				return Negotiate.WithStatusCode(HttpStatusCode.Created)
-								.WithModel(new PaymentResponse() { OrderID = request.OrderID, PaymentConfirmationNumber = paymentID });
+				PublishMessage(messagePublisher, new PaymentCompleteModel(request.CartID));
+				return Negotiate.WithStatusCode(HttpStatusCode.Created).WithReasonPhrase("Thank you for your payment.");
 			}
-				
-			
-			return
-				Negotiate.WithStatusCode(HttpStatusCode.BadRequest)
-				         .WithModel(new PaymentResponse() { OrderID = request.OrderID, PaymentConfirmationNumber = null})
-						 .WithReasonPhrase("Invalid information provided.");
-		}*/
-	//}
+			return Negotiate.WithStatusCode(HttpStatusCode.BadRequest).WithReasonPhrase("Cart does not exist");
+			//					.WithModel(new PaymentResponse() { OrderID = request.OrderID, PaymentConfirmationNumber = _orderIDToPaymentIDLookup[request.OrderID] });
+
+			//if (result)
+			//{
+			//	var paymentID = Guid.NewGuid();
+			//	_orderIDToPaymentIDLookup.Add(request.OrderID, paymentID);
+
+			//	return Negotiate.WithStatusCode(HttpStatusCode.Created)
+			//					.WithModel(new PaymentResponse() { OrderID = request.OrderID, PaymentConfirmationNumber = paymentID });
+			//}
+
+
+			//return
+			//	Negotiate.WithStatusCode(HttpStatusCode.BadRequest)
+			//			 .WithModel(new PaymentResponse() { OrderID = request.OrderID, PaymentConfirmationNumber = null})
+			//			 .WithReasonPhrase("Invalid information provided.");
+
+		}
+
+		private static void PublishMessage(IPublishMessages messagePublisher, object message)
+		{
+			messagePublisher.Publish(message);
+		}
+	}
 }

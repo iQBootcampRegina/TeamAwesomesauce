@@ -89,8 +89,9 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configurations\PaymentSubscriberConfiguration.cs" />
+    <Compile Include="Configurations\PaymentConfiguration.cs" />
     <Compile Include="Messages\NewUnpaidOrderMessage.cs" />
+    <Compile Include="Messages\PaymentCompleteModel.cs" />
     <Compile Include="Messages\SubmitPaymentMessage.cs" />
     <Compile Include="NancyBootstrapper.cs" />
     <Compile Include="PaymentProcessingModule.cs" />
