@@ -34,23 +34,6 @@ namespace PaymentService
 				return Negotiate.WithStatusCode(HttpStatusCode.Created).WithReasonPhrase("Thank you for your payment.");
 			}
 			return Negotiate.WithStatusCode(HttpStatusCode.BadRequest).WithReasonPhrase("Cart does not exist");
-			//					.WithModel(new PaymentResponse() { OrderID = request.OrderID, PaymentConfirmationNumber = _orderIDToPaymentIDLookup[request.OrderID] });
-
-			//if (result)
-			//{
-			//	var paymentID = Guid.NewGuid();
-			//	_orderIDToPaymentIDLookup.Add(request.OrderID, paymentID);
-
-			//	return Negotiate.WithStatusCode(HttpStatusCode.Created)
-			//					.WithModel(new PaymentResponse() { OrderID = request.OrderID, PaymentConfirmationNumber = paymentID });
-			//}
-
-
-			//return
-			//	Negotiate.WithStatusCode(HttpStatusCode.BadRequest)
-			//			 .WithModel(new PaymentResponse() { OrderID = request.OrderID, PaymentConfirmationNumber = null})
-			//			 .WithReasonPhrase("Invalid information provided.");
-
 		}
 
 		private static void PublishMessage(IPublishMessages messagePublisher, object message)
