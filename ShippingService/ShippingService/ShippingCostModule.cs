@@ -14,9 +14,13 @@ namespace ShippingService
 	/// </summary>
 	public class ShippingCostModule : NancyModule
 	{
+		private static Dictionary<Guid, ShippingCart> ShippingCarts; 
+
 		public static void Main(string[] args)
 		{
 			var servicebusBootstrapper = new DefaultAzureServiceBusBootstrapper(new CartServiceSubscriberConfiguration());
+
+			ShippingCarts = new Dictionary<Guid, ShippingCart>();
 		}
 
 
