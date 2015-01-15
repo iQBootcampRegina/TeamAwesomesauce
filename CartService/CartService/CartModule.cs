@@ -15,7 +15,7 @@ namespace CartService
 		IPublishMessages messagePublisher;
 		//Nothing wrong with this.
 		private static readonly List<CartModel> _carts = new List<CartModel>();
-
+		private static Dictionary<Guid,decimal> _shippingPrices = new Dictionary<Guid, decimal>();
 
 		public CartModule()
 		{
@@ -28,8 +28,24 @@ namespace CartService
 
 			DefaultAzureServiceBusBootstrapper bootstrapper = new DefaultAzureServiceBusBootstrapper(new CartServiceConfiguration());
 			messagePublisher = bootstrapper.BuildMessagePublisher();
-
+			bootstrapper.MessageHandlerRegisterer.Register<ShippingPriceModel>(ShippingPriceUpdateddHandler);
 			bootstrapper.MessageHandlerRegisterer.Register<PaymentCompletedModel>(PaymentCompletedHandler);
+		}
+
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="message"></param>
+		private void ShippingPriceUpdateddHandler(ShippingPriceModel message)
+		{
+			if (_shippingPrices.ContainsKey(message.CartId))
+			{
+				_shippingPrices[message.CartId] = message.Price;
+			}
+			else
+			{
+				_shippingPrices.Add(message.CartId, message.Price);
+			}
 		}
 
 		private object CheckoutCart(Guid id)
@@ -40,10 +56,43 @@ namespace CartService
 
 		}
 
-		private decimal GetFinalAmount(Guid id)
+		private decimal GetFinalAmount(Guid cartId)
 		{
 			//total products + shipping
-			return 100.0m;
+			var cart = GetCartById(cartId) as CartModel;
+			var price = 0m;
+			if (cart != null)
+			{
+			 price=	cart.Products.Sum(x => GetProductPrice(x));
+			}
+			else
+			{
+				//yes
+				throw new KeyNotFoundException();
+			}
+
+			price += GetShippingPrice(cartId);
+
+			return price;
+
+		}
+
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="cartId"></param>
+		/// <returns></returns>
+		private decimal GetShippingPrice(Guid cartId)
+		{
+			if (_shippingPrices.ContainsKey(cartId))
+				return _shippingPrices[cartId];
+			//great deal
+			return 9.99m;
+		}
+
+		private decimal GetProductPrice(Guid guid)
+		{
+			return 10m;
 		}
 
 		private void PaymentCompletedHandler(PaymentCompletedModel message)
