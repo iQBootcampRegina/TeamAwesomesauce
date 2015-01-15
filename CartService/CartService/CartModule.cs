@@ -41,7 +41,7 @@ namespace CartService
 		private object CheckoutCart(Guid id)
 		{
 			decimal amount = GetFinalAmount(id);
-			PublishUtility.PublishMessage(messagePublisher, new CartCheckoutModel(id, amount));
+			PublishUtility.PublishMessage(messagePublisher, new NewCartCheckoutMessage(id, amount));
 
 			return HttpStatusCode.OK;
 
@@ -95,7 +95,7 @@ namespace CartService
 		///
 		/// </summary>
 		/// <param name="message"></param>
-		public void PaymentCompletedHandler(IPaymentCompleteModel message)
+		public void PaymentCompletedHandler(PaymentCompleteMessage message)
 		{
 			// Move cart to paid - notify it is paid
 			CartModel cartById = (CartModel)GetCartById(message.CartID);

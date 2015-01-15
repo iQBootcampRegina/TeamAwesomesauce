@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CartService", "CartService\CartService.csproj", "{D6339768-2500-40AD-9C71-9E15DA871D76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentServiceMessageContracts", "..\PaymentService\PaymentServiceMessageContracts\PaymentServiceMessageContracts.csproj", "{D6CA7A32-5B82-4A3F-AE89-66B14D66AA6A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageContracts", "..\PaymentService\PaymentServiceMessageContracts\MessageContracts.csproj", "{D6CA7A32-5B82-4A3F-AE89-66B14D66AA6A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
