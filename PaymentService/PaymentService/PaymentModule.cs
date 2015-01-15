@@ -9,7 +9,7 @@ namespace PaymentService
 {
 	public class PaymentModule : NancyModule
 	{
-		private static readonly Dictionary<Guid, Guid> _orderIDToPaymentIDLookup = new Dictionary<Guid, Guid>();
+		//private static readonly Dictionary<Guid, decimal> _unpaidCarts = new Dictionary<Guid, decimal>();
 
 		public PaymentModule()
 		{
@@ -19,7 +19,7 @@ namespace PaymentService
 
 		public object GetPayment(Guid orderId)
 		{
-			if (!_orderIDToPaymentIDLookup.ContainsKey(orderId))
+			/*if (!_orderIDToPaymentIDLookup.ContainsKey(orderId))
 				return
 					Negotiate.WithStatusCode(HttpStatusCode.NotFound)
 							 .WithModel(new PaymentResponse() { OrderID = orderId, PaymentConfirmationNumber = null });
@@ -30,12 +30,12 @@ namespace PaymentService
 					         {
 								 OrderID = orderId,
 								 PaymentConfirmationNumber = _orderIDToPaymentIDLookup[orderId]
-					         });
+					         });*/
 		}
 
 		public object SubmitPayment()
 		{
-			var request = this.Bind<SubmitPaymentRequest>();
+			/*var request = this.Bind<SubmitPaymentRequest>();
 			if (_orderIDToPaymentIDLookup.ContainsKey(request.OrderID))
 				return Negotiate.WithStatusCode(HttpStatusCode.Conflict)
 								.WithModel(new PaymentResponse() { OrderID = request.OrderID, PaymentConfirmationNumber = _orderIDToPaymentIDLookup[request.OrderID] });
@@ -54,7 +54,7 @@ namespace PaymentService
 			return
 				Negotiate.WithStatusCode(HttpStatusCode.BadRequest)
 				         .WithModel(new PaymentResponse() { OrderID = request.OrderID, PaymentConfirmationNumber = null})
-						 .WithReasonPhrase("Invalid information provided.");
+						 .WithReasonPhrase("Invalid information provided.");*/
 		}
 	}
 }
