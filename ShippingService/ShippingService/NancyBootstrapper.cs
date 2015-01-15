@@ -16,8 +16,8 @@ namespace ShippingService
 		{
 			var servicebusBootstrapper = new DefaultAzureServiceBusBootstrapper(new CartServiceSubscriberConfiguration());
 
-			servicebusBootstrapper.MessageHandlerRegisterer.Register(typeof(ProductAddedToCart), new ProductAddedToCartMessageHandler());
-			servicebusBootstrapper.MessageHandlerRegisterer.Register(typeof(ProductRemovedFromCart), new ProductRemovedFromCartMessageHandler());
+			servicebusBootstrapper.MessageHandlerRegisterer.Register<ProductAddedToCart>(CartServiceMessageHandler.HandleProductAddedToCartMessage);
+			servicebusBootstrapper.MessageHandlerRegisterer.Register<ProductRemovedFromCart>(CartServiceMessageHandler.HandleProductRemovedFromCartMessage);
 
 			servicebusBootstrapper.Subscribe();
 		}

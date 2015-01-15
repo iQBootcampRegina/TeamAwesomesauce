@@ -18,13 +18,12 @@ namespace ShippingService
 	/// </summary>
 	public class ShippingCostModule : NancyModule
 	{
-		private static Dictionary<Guid, ShippingCart> ShippingCarts  = new Dictionary<Guid, ShippingCart>();
+		
 		public static string lastMessage;
 
 
 		public ShippingCostModule()
 		{
-			lastMessage = "empty";
 			Nancy.StaticConfiguration.DisableErrorTraces = false;
 			Get["/cost"] = x => GetShippingCost();
 			Get["/"] = x => { return lastMessage; };
@@ -55,23 +54,26 @@ namespace ShippingService
 		public decimal Cost { get; set; }
 	}
 
-	public class ProductAddedToCartMessageHandler : BaseMessageHandler<ProductAddedToCart>
+	public static class CartServiceMessageHandler
 	{
-		public override void Handle(ProductAddedToCart message)
+
+		public static void HandleProductAddedToCartMessage(ProductAddedToCart message)
 		{
 			Console.WriteLine("message recieved" + message.ToString());
 
 			ShippingCostModule.lastMessage = "add " + message.ToString();
 		}
-	}
 
-	public class ProductRemovedFromCartMessageHandler : BaseMessageHandler<ProductRemovedFromCart>
-	{
-		public override void Handle(ProductRemovedFromCart message)
+		public static void HandleProductRemovedFromCartMessage(ProductRemovedFromCart message)
 		{
 			Console.WriteLine("message recieved" + message.ToString());
 
 			ShippingCostModule.lastMessage = "remove " + message.ToString();
+		}
+
+		private static void EnsureCartExistsInLocalModel(Guid cartID)
+		{
+			
 		}
 	}
 }
