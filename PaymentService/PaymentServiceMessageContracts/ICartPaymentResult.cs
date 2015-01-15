@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace PaymentServiceMessageContracts
 {
-	public interface ISubmitPaymentMessage
+	public interface ICartPaymentResult
 	{
 		Guid CartID { get; }
-		string BillingInfo { get; }
-		decimal Amount { get; }
+		bool PaymentSuccessful { get; }
 	}
 }

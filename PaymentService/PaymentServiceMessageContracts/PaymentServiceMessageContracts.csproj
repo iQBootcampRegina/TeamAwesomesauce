@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="INewUnpaidOrderMessage.cs" />
+    <Compile Include="ICartPaymentResult.cs" />
     <Compile Include="ISubmitPaymentMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

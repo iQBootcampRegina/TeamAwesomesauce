@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using IQ.Foundation.Messaging.AzureServiceBus.Configuration;
 
-namespace PaymentService
+namespace PaymentService.Configurations
 {
 	public class PaymentSubscriberConfiguration : ConventionServiceBusConfiguration
 	{

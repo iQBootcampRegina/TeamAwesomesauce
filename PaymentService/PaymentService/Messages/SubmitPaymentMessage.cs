@@ -13,11 +13,11 @@ namespace PaymentService.Messages
 		{
 			this.CartID = cartID;
 			this.BillingInfo = billingInfo;
-			this.AmountDue = amount;
+			this.Amount = amount;
 		}
 		
 		public Guid CartID { get; private set; }
 		public string BillingInfo { get; private set; }
-		public decimal AmountDue { get; private set; }
+		public decimal Amount { get; private set; }
 	}
 }

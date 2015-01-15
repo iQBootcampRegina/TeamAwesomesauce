@@ -7,11 +7,11 @@ using Nancy.ModelBinding;
 
 namespace PaymentService
 {
-	public class PaymentModule : NancyModule
+	/*public class PaymentModule : NancyModule
 	{
 		//private static readonly Dictionary<Guid, decimal> _unpaidCarts = new Dictionary<Guid, decimal>();
 
-		public PaymentModule()
+		/*public PaymentModule()
 		{
 			Post["/payment/submit"] = x => SubmitPayment();
 			Get["/payment({id})"] = x => GetPayment(x.id);
@@ -31,9 +31,9 @@ namespace PaymentService
 								 OrderID = orderId,
 								 PaymentConfirmationNumber = _orderIDToPaymentIDLookup[orderId]
 					         });*/
-		}
+		//}
 
-		public object SubmitPayment()
+		/*public object SubmitPayment()
 		{
 			/*var request = this.Bind<SubmitPaymentRequest>();
 			if (_orderIDToPaymentIDLookup.ContainsKey(request.OrderID))
@@ -54,7 +54,7 @@ namespace PaymentService
 			return
 				Negotiate.WithStatusCode(HttpStatusCode.BadRequest)
 				         .WithModel(new PaymentResponse() { OrderID = request.OrderID, PaymentConfirmationNumber = null})
-						 .WithReasonPhrase("Invalid information provided.");*/
-		}
-	}
+						 .WithReasonPhrase("Invalid information provided.");
+		}*/
+	//}
 }
