@@ -13,9 +13,10 @@ namespace CartService
 	public class CartModule : NancyModule
 	{
 		IPublishMessages messagePublisher;
+		IEnqueueMessages messageQueuePublisher;
 		//Nothing wrong with this.
 		private static readonly List<CartModel> _carts = new List<CartModel>();
-		private static Dictionary<Guid,decimal> _shippingPrices = new Dictionary<Guid, decimal>();
+		private static Dictionary<Guid, decimal> _shippingPrices = new Dictionary<Guid, decimal>();
 
 		public CartModule()
 		{
@@ -28,9 +29,15 @@ namespace CartService
 
 			DefaultAzureServiceBusBootstrapper bootstrapper = new DefaultAzureServiceBusBootstrapper(new CartServiceConfiguration());
 			messagePublisher = bootstrapper.BuildMessagePublisher();
+
+			messageQueuePublisher = bootstrapper.BuildQueueProducer();
+			// Listen to Shipping info being received
 			bootstrapper.MessageHandlerRegisterer.Register<ShippingPriceModel>(ShippingPriceUpdateddHandler);
+			// Listen to cart payments complete
 			bootstrapper.MessageHandlerRegisterer.Register<PaymentCompletedModel>(PaymentCompletedHandler);
 		}
+
+
 
 		/// <summary>
 		///
@@ -48,14 +55,25 @@ namespace CartService
 			}
 		}
 
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 		private object CheckoutCart(Guid id)
 		{
 			decimal amount = GetFinalAmount(id);
-			PublishMessage(messagePublisher, new CartCheckoutModel(id, amount));
+			PublishUtility.PublishMessage(messagePublisher, new CartCheckoutModel(id, amount));
+
 			return HttpStatusCode.OK;
 
 		}
 
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="cartId"></param>
+		/// <returns></returns>
 		private decimal GetFinalAmount(Guid cartId)
 		{
 			//total products + shipping
@@ -63,7 +81,7 @@ namespace CartService
 			var price = 0m;
 			if (cart != null)
 			{
-			 price=	cart.Products.Sum(x => GetProductPrice(x));
+				price = cart.Products.Sum(x => GetProductPrice(x));
 			}
 			else
 			{
@@ -95,12 +113,21 @@ namespace CartService
 			return 10m;
 		}
 
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="message"></param>
 		private void PaymentCompletedHandler(PaymentCompletedModel message)
 		{
 			// Move cart to paid - notify it is paid
-			throw new NotImplementedException();
-		}
+			CartModel cartById = (CartModel)GetCartById(message.CartId);
+			if (cartById != null)
+			{
+				PublishUtility.PublishMessage(messageQueuePublisher, cartById);
+				_carts.Remove(cartById);
+			}
 
+		}
 
 
 		/// <summary>
@@ -117,7 +144,7 @@ namespace CartService
 				return HttpStatusCode.OK;
 			}
 
-			PublishMessage(messagePublisher, new ProductRemovedFromCart(cart.id, productId));
+			PublishUtility.PublishMessage(messagePublisher, new ProductRemovedFromCart(cart.id, productId));
 
 			return HttpStatusCode.NotFound;
 
@@ -155,7 +182,7 @@ namespace CartService
 			}
 			//Call Add product to cart
 
-			PublishMessage(messagePublisher, new ProductAddedToCart(cart.id, request.productId));
+			PublishUtility.PublishMessage(messagePublisher, new ProductAddedToCart(cart.id, request.productId));
 
 			return HttpStatusCode.NotFound;
 
@@ -170,13 +197,5 @@ namespace CartService
 			_carts.Add(cartModel);
 			return cartModel;
 		}
-
-		private static void PublishMessage(IPublishMessages messagePublisher, object message)
-		{
-			Console.WriteLine(message.ToString());
-			messagePublisher.Publish(message);
-		}
-
-
 	}
 }
