@@ -71,7 +71,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configurations\PaymentSubscriberConfiguration.cs" />
-    <Compile Include="Messages\PaymentAmountMessage.cs" />
+    <Compile Include="Messages\NewUnpaidOrderMessage.cs" />
+    <Compile Include="Messages\SubmitPaymentMessage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
