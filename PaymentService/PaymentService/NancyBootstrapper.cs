@@ -5,6 +5,8 @@ using System.Web;
 using IQ.Foundation.Messaging.AzureServiceBus;
 using IQ.Foundation.Messaging.AzureServiceBus.Configuration;
 using Nancy;
+using Nancy.Bootstrapper;
+using Nancy.TinyIoc;
 using PaymentService.Configurations;
 using PaymentService.Messages;
 
@@ -12,10 +14,7 @@ namespace PaymentService
 {
 	public class NancyBootstrapper : DefaultNancyBootstrapper
 	{
-		private static readonly Dictionary<Guid, decimal> _unpaidOrderAmounts = new Dictionary<Guid, decimal>();
-		public IReadOnlyDictionary<Guid, decimal> UnpaidOrderAmounts { get { return _unpaidOrderAmounts; } }
-
-		protected override void ApplicationStartup(Nancy.TinyIoc.TinyIoCContainer container, Nancy.Bootstrapper.IPipelines pipelines)
+		protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
 		{
 			base.ApplicationStartup(container, pipelines);
 
@@ -27,10 +26,7 @@ namespace PaymentService
 
 		private static void HandlePaymentMessage(NewUnpaidOrderMessage message)
 		{
-			if (_unpaidOrderAmounts.ContainsKey(message.CartID))
-				_unpaidOrderAmounts[message.CartID] = message.AmountDue;
-			else
-				_unpaidOrderAmounts.Add(message.CartID, message.AmountDue);
+			UnpaidCartDataStore.SetAmount(message.CartID, message.AmountDue);
 
 			//Console.WriteLine(string.Format("Received new order => ID: {0} for order ID {1}", message.CartID, message.Amount));
 		}
