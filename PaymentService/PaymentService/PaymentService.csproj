@@ -89,6 +89,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AzureBootstrapper.cs" />
     <Compile Include="Configurations\PaymentConfiguration.cs" />
     <Compile Include="NancyBootstrapper.cs" />
     <Compile Include="PaymentProcessingModule.cs" />

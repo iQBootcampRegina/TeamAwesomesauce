@@ -18,7 +18,7 @@ namespace PaymentService
 		{
 			base.ApplicationStartup(container, pipelines);
 
-			var serviceBusBootStrapper = new DefaultAzureServiceBusBootstrapper(new PaymentConfiguration());
+			var serviceBusBootStrapper = new AzureBootstrapper(new PaymentConfiguration());
 
 			serviceBusBootStrapper.MessageHandlerRegisterer.Register<NewCartCheckoutMessage>(HandlePaymentMessage);
 			serviceBusBootStrapper.Subscribe();
