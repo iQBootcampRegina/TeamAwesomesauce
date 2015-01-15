@@ -8,7 +8,7 @@ using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.TinyIoc;
 using PaymentService.Configurations;
-using PaymentService.Messages;
+using PaymentServiceMessageContracts;
 
 namespace PaymentService
 {
@@ -20,11 +20,11 @@ namespace PaymentService
 
 			var serviceBusBootStrapper = new DefaultAzureServiceBusBootstrapper(new PaymentConfiguration());
 
-			serviceBusBootStrapper.MessageHandlerRegisterer.Register<NewUnpaidOrderMessage>(HandlePaymentMessage);
+			serviceBusBootStrapper.MessageHandlerRegisterer.Register<NewCartCheckoutMessage>(HandlePaymentMessage);
 			serviceBusBootStrapper.Subscribe();
 		}
 
-		private static void HandlePaymentMessage(NewUnpaidOrderMessage message)
+		private static void HandlePaymentMessage(NewCartCheckoutMessage message)
 		{
 			if(message != null)
 				UnpaidCartDataStore.SetAmount(message.CartID, message.AmountDue);

@@ -4,13 +4,13 @@ using System.Linq;
 using System.Web;
 using PaymentServiceMessageContracts;
 
-namespace PaymentService.Messages
+namespace PaymentServiceMessageContracts
 {
-	public class PaymentCompleteModel : IPaymentCompleteModel
+	public class PaymentCompleteMessage
 	{
 		public Guid CartID { get; private set; }
 
-		public PaymentCompleteModel(Guid cartID)
+		public PaymentCompleteMessage(Guid cartID)
 		{
 			CartID = cartID;
 		}

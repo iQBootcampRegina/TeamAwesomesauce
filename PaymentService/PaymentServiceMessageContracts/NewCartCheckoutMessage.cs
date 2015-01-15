@@ -4,11 +4,11 @@ using System.Linq;
 using System.Web;
 using PaymentServiceMessageContracts;
 
-namespace PaymentService.Messages
+namespace PaymentServiceMessageContracts
 {
-	public class NewUnpaidOrderMessage : INewUnpaidOrderMessage
+	public class NewCartCheckoutMessage
 	{
-		public NewUnpaidOrderMessage(Guid cartID, decimal amountDue)
+		public NewCartCheckoutMessage(Guid cartID, decimal amountDue)
 		{
 			this.CartID = cartID;
 			this.AmountDue = amountDue;

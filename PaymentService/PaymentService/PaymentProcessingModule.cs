@@ -7,7 +7,7 @@ using IQ.Foundation.Messaging.AzureServiceBus;
 using Nancy;
 using Nancy.ModelBinding;
 using PaymentService.Configurations;
-using PaymentService.Messages;
+using PaymentServiceMessageContracts;
 
 namespace PaymentService
 {
@@ -29,7 +29,7 @@ namespace PaymentService
 			var request = this.Bind<SubmitPaymentMessage>();
 			if (UnpaidCartDataStore.GetAmount(request.CartID) != null)
 			{
-				PublishMessage(messagePublisher, new PaymentCompleteModel(request.CartID));
+				PublishMessage(messagePublisher, new PaymentCompleteMessage(request.CartID));
 				UnpaidCartDataStore.SetOrderAsPaid(request.CartID);
 				return Negotiate.WithStatusCode(HttpStatusCode.Created).WithReasonPhrase("Thank you for your payment.");
 			}

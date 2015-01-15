@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using PaymentServiceMessageContracts;
 
-namespace PaymentService.Messages
+namespace PaymentServiceMessageContracts
 {
-	class SubmitPaymentMessage : ISubmitPaymentMessage
+	public class SubmitPaymentMessage
 	{
 		public SubmitPaymentMessage()
 		{

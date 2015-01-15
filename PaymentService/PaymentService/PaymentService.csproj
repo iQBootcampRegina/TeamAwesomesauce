@@ -90,9 +90,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configurations\PaymentConfiguration.cs" />
-    <Compile Include="Messages\NewUnpaidOrderMessage.cs" />
-    <Compile Include="Messages\PaymentCompleteModel.cs" />
-    <Compile Include="Messages\SubmitPaymentMessage.cs" />
     <Compile Include="NancyBootstrapper.cs" />
     <Compile Include="PaymentProcessingModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
