@@ -79,7 +79,7 @@ namespace CartService
 		/// <returns></returns>
 		private object CreateCart()
 		{
-			var cartModel = new CartModel() { id = new Guid(), Products = new List<Guid>() };
+			var cartModel = new CartModel() { id = Guid.NewGuid(), Products = new List<Guid>() };
 			_carts.Add(cartModel);
 			return cartModel;
 		}
