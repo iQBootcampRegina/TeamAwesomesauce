@@ -1,8 +1,9 @@
-﻿using IQ.Foundation.Messaging.AzureServiceBus.Configuration;
+﻿using System.Collections.Generic;
+using IQ.Foundation.Messaging.AzureServiceBus.Configuration;
 
 namespace CartService
 {
-	public class CartPublisherConfiguration : ConventionServiceBusConfiguration
+	public class CartServiceConfiguration : ConventionServiceBusConfiguration
 	{
 		public override string ConnectionString
 		{
@@ -18,5 +19,11 @@ namespace CartService
 		{
 			get { return true; }
 		}
+
+		protected override IEnumerable<string> SubscriptionTopics
+		{
+			get { yield return "TA.PricingService"; }
+		}
 	}
+
 }

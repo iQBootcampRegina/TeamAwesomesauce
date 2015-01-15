@@ -90,9 +90,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddProductRequest.cs" />
-    <Compile Include="CartPublisherConfiguration.cs" />
+    <Compile Include="CartCheckoutModel.cs" />
+    <Compile Include="CartServiceConfiguration.cs" />
     <Compile Include="CartModel.cs" />
     <Compile Include="CartModule.cs" />
+    <Compile Include="PaymentCompletedModel.cs" />
     <Compile Include="ProductAddedToCart.cs" />
     <Compile Include="ProductInCart.cs" />
     <Compile Include="ProductRemovedFromCart.cs" />
