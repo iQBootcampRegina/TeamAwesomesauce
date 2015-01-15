@@ -86,9 +86,18 @@ namespace ShippingService
 			// In reality, we'd connect to the Product Library to request/response
 			// the shipping info for this product. However, we're not implementing
 			// that service/API in this bootcamp, so create random numbers instead.
-			////var dimensions = new Dimensions(Random(   Decimal.Round())
+			var pseudoRandomDecimalGenerator = new Random(DateTime.UtcNow.Millisecond);
+			var dimensions = new Dimensions(height: pseudoRandomDecimalGenerator.Next(1, 50000)/100.0m,
+			                                width: pseudoRandomDecimalGenerator.Next(1, 50000)/100.0m,
+			                                length: pseudoRandomDecimalGenerator.Next(1, 50000)/100.0m);
+			var weight = pseudoRandomDecimalGenerator.Next(1, 100000)/100.0m;
+			var shippingInfo = new ShippingProduct(dimensions, weight);
 
-			////var shippingInfo = new ShippingProduct(Dimensions,)
+			// Cache the "retrieved" shipping info for this product.
+			if (!_products.ContainsKey(productId))
+				_products.Add(productId, shippingInfo);
+			else
+				_products[productId] = shippingInfo;
 		}
 	}
 
