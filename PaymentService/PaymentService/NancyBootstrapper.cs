@@ -26,7 +26,8 @@ namespace PaymentService
 
 		private static void HandlePaymentMessage(NewUnpaidOrderMessage message)
 		{
-			UnpaidCartDataStore.SetAmount(message.CartID, message.AmountDue);
+			if(message != null)
+				UnpaidCartDataStore.SetAmount(message.CartID, message.AmountDue);
 
 			//Console.WriteLine(string.Format("Received new order => ID: {0} for order ID {1}", message.CartID, message.Amount));
 		}
