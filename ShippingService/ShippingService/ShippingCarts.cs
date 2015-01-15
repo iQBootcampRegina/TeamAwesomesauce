@@ -64,14 +64,34 @@ namespace ShippingService
 			_carts[cartId].RemoveProduct(productId);
 		}
 
-		//public static void 
+		public static decimal? GetProductsShippingCost(Guid cartId)
+		{
+			if (!Carts.ContainsKey(cartId))
+				return null;
+
+			decimal? returnCost = 0.0m;
+
+			foreach (Guid productId in Carts[cartId].Contents.Keys)
+			{
+				int quantity = Carts[cartId].Contents[productId];
+				if (quantity <= 0)
+					continue;
+				
+				var productShippingInfo = ShippingProductCache.ObtainProductShippingInfo(productId);
+				// "Proprietary Shipping Cost algorithm" - a dummy model of the real implementation
+				returnCost += quantity * (0.33m * productShippingInfo.Dimensions.Height
+				                        + 0.40m * productShippingInfo.Dimensions.Length
+				                        + 0.55m * productShippingInfo.Dimensions.Width
+				                        + 0.80m * productShippingInfo.Weight);
+			}
+
+			return returnCost;
+		}
 	}
 
 	public static class ShippingProductCache
 	{
 		private static Dictionary<Guid, ShippingProduct> _products = new Dictionary<Guid, ShippingProduct>(); 
-		// Thanks to Ryan Marcotte for telling us about IReadOnlyDictionary in .NET 4.5.
-		public static IReadOnlyDictionary<Guid, ShippingProduct> Products { get { return _products;} }
 
 		public static ShippingProduct ObtainProductShippingInfo(Guid productId)
 		{
