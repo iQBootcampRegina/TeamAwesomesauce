@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using CartService.MessageContracts;
 using IQ.Foundation.Messaging;
 using IQ.Foundation.Messaging.AzureServiceBus;
 using Nancy;
@@ -34,7 +35,7 @@ namespace CartService
 			// Listen to Shipping info being received
 			bootstrapper.MessageHandlerRegisterer.Register<ShippingPriceModel>(ShippingPriceUpdateddHandler);
 			// Listen to cart payments complete
-			bootstrapper.MessageHandlerRegisterer.Register<PaymentCompletedModel>(PaymentCompletedHandler);
+			bootstrapper.MessageHandlerRegisterer.Register<ICartPaymentResult>(PaymentCompletedHandler);
 		}
 
 
@@ -117,10 +118,10 @@ namespace CartService
 		///
 		/// </summary>
 		/// <param name="message"></param>
-		private void PaymentCompletedHandler(PaymentCompletedModel message)
+		private void PaymentCompletedHandler(ICartPaymentResult message)
 		{
 			// Move cart to paid - notify it is paid
-			CartModel cartById = (CartModel)GetCartById(message.CartId);
+			CartModel cartById = (CartModel)GetCartById(message.CartID);
 			if (cartById != null)
 			{
 				PublishUtility.PublishMessage(messageQueuePublisher, cartById);

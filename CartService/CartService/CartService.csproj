@@ -95,6 +95,7 @@
     <Compile Include="CartModel.cs" />
     <Compile Include="CartModule.cs" />
     <Compile Include="CartUtils.cs" />
+    <Compile Include="MessageContracts\ICartPaymentResult.cs" />
     <Compile Include="PaymentCompletedModel.cs" />
     <Compile Include="ProductAddedToCart.cs" />
     <Compile Include="ProductInCart.cs" />

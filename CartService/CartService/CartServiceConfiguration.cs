@@ -22,7 +22,7 @@ namespace CartService
 
 		protected override IEnumerable<string> SubscriptionTopics
 		{
-			get { yield return "TA.PricingService"; }
+			get { yield return "TA.PaymentService"; }
 		}
 	}
 
