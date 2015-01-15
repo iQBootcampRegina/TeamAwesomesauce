@@ -21,20 +21,20 @@ namespace ShippingService
 			_contents = new Dictionary<Guid, int>();
 		}
 
-		public void AddProduct(Guid productID)
+		public void AddProduct(Guid productId)
 		{
-			if (!_contents.ContainsKey(productID))
-				_contents.Add(productID, 1);
+			if (!_contents.ContainsKey(productId))
+				_contents.Add(productId, 1);
 			else
-				_contents[productID]++;
+				_contents[productId]++;
 		}
 
-		public void RemoveProduct(Guid productID)
+		public void RemoveProduct(Guid productId)
 		{
-			if (!_contents.ContainsKey(productID))
-				_contents.Add(productID, -1);
+			if (!_contents.ContainsKey(productId))
+				_contents.Add(productId, -1);
 			else
-				_contents[productID]--;
+				_contents[productId]--;
 		}
 	}
 
@@ -44,15 +44,52 @@ namespace ShippingService
 	/// </summary>
 	public static class ShippingCarts
 	{
-		private Dictionary<Guid, ShippingCart> 
-		public static Dictionary<Guid, ShippingCart> Carts = new Dictionary<Guid, ShippingCart>();
+		private static Dictionary<Guid, ShippingCart> _carts = new Dictionary<Guid, ShippingCart>();
+		// Thanks to Ryan Marcotte for telling us about IReadOnlyDictionary in .NET 4.5.
+		public static IReadOnlyDictionary<Guid, ShippingCart> Carts { get { return _carts; } }
 
-		public static void AddToCart(Guid cartID, Guid productID)
+		public static void AddToCart(Guid cartId, Guid productId)
 		{
-			if (!Carts.ContainsKey(cartID))
-				Carts.Add(cartID, new ShippingCart());
+			if (!Carts.ContainsKey(cartId))
+				_carts.Add(cartId, new ShippingCart());
 
-			Carts[cartID].AddProduct(productID)
+			_carts[cartId].AddProduct(productId);
+		}
+
+		public static void RemoveFromCart(Guid cartId, Guid productId)
+		{
+			if (!Carts.ContainsKey(cartId))
+				_carts.Add(cartId, new ShippingCart());
+
+			_carts[cartId].RemoveProduct(productId);
+		}
+
+		//public static void 
+	}
+
+	public static class ShippingProductCache
+	{
+		private static Dictionary<Guid, ShippingProduct> _products = new Dictionary<Guid, ShippingProduct>(); 
+		// Thanks to Ryan Marcotte for telling us about IReadOnlyDictionary in .NET 4.5.
+		public static IReadOnlyDictionary<Guid, ShippingProduct> Products { get { return _products;} }
+
+		public static ShippingProduct ObtainProductShippingInfo(Guid productId)
+		{
+			if (!_products.ContainsKey(productId))
+				CacheProductShippingInfo(productId);
+
+			return _products[productId];
+		}
+
+		private static void CacheProductShippingInfo(Guid productId)
+		{
+			// In reality, we'd connect to the Product Library to request/response
+			// the shipping info for this product. However, we're not implementing
+			// that service/API in this bootcamp, so create random numbers instead.
+			////var dimensions = new Dimensions(Random(   Decimal.Round())
+
+			////var shippingInfo = new ShippingProduct(Dimensions,)
 		}
 	}
+
 }
