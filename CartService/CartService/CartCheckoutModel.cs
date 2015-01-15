@@ -1,17 +1,18 @@
 ﻿using System;
+using PaymentServiceMessageContracts;
 
 namespace CartService
 {
-	internal class CartCheckoutModel
+	internal class CartCheckoutModel : INewUnpaidOrderMessage
 	{
-		public CartCheckoutModel(Guid id, decimal amount)
+		public CartCheckoutModel(Guid id, decimal amountDue)
 		{
-			CartId = id;
-			CartAmount = amount;
+			CartID = id;
+			AmountDue = amountDue;
 		}
 
-		public decimal CartAmount { get; set; }
+		public Guid CartID { get; private set; }
+		public decimal AmountDue { get; set; }
 
-		public Guid CartId { get; set; }
 	}
 }

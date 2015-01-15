@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using CartService.MessageContracts;
 using IQ.Foundation.Messaging;
 using IQ.Foundation.Messaging.AzureServiceBus;
 using Nancy;
 using Nancy.ModelBinding;
+using PaymentServiceMessageContracts;
 
 namespace CartService
 {
@@ -95,7 +95,7 @@ namespace CartService
 		///
 		/// </summary>
 		/// <param name="message"></param>
-		public void PaymentCompletedHandler(ICartPaymentResult message)
+		public void PaymentCompletedHandler(IPaymentCompleteModel message)
 		{
 			// Move cart to paid - notify it is paid
 			CartModel cartById = (CartModel)GetCartById(message.CartID);

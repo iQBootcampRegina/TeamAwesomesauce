@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using CartService.MessageContracts;
 using IQ.Foundation.Messaging.AzureServiceBus;
 using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.TinyIoc;
+using PaymentServiceMessageContracts;
 
 namespace CartService
 {
@@ -28,7 +28,7 @@ namespace CartService
 			var cartModule = container.Resolve<CartModule>();
 			bootstrapper.MessageHandlerRegisterer.Register<ShippingQuoteResult>(cartModule.ShippingPriceUpdateddHandler);
 			// Listen to cart payments complete
-			bootstrapper.MessageHandlerRegisterer.Register<ICartPaymentResult>(cartModule.PaymentCompletedHandler);
+			bootstrapper.MessageHandlerRegisterer.Register<IPaymentCompleteModel>(cartModule.PaymentCompletedHandler);
 		}
 
 	}

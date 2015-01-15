@@ -96,7 +96,6 @@
     <Compile Include="CartModule.cs" />
     <Compile Include="CartUtils.cs" />
     <Compile Include="IShippingQuoteResult.cs" />
-    <Compile Include="MessageContracts\ICartPaymentResult.cs" />
     <Compile Include="NancyBootstrapper.cs" />
     <Compile Include="PaymentCompletedModel.cs" />
     <Compile Include="ProductAddedToCart.cs" />
@@ -115,6 +114,12 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\PaymentService\PaymentServiceMessageContracts\PaymentServiceMessageContracts.csproj">
+      <Project>{D6CA7A32-5B82-4A3F-AE89-66B14D66AA6A}</Project>
+      <Name>PaymentServiceMessageContracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
