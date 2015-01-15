@@ -93,7 +93,9 @@
   <ItemGroup>
     <Compile Include="CartServiceSubscriberConfiguration.cs" />
     <Compile Include="Dimensions.cs" />
+    <Compile Include="NancyBootstrapper.cs" />
     <Compile Include="ProductAddedToCart.cs" />
+    <Compile Include="ProductInCart.cs" />
     <Compile Include="ProductRemovedFromCart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShippingCarts.cs" />
@@ -103,6 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <None Include="Properties\PublishProfiles\ta-shipping.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

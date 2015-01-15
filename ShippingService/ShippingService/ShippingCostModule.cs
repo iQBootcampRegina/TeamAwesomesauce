@@ -1,4 +1,6 @@
-﻿using IQ.Foundation.Messaging.AzureServiceBus;
+﻿using CartService;
+using IQ.Foundation.Messaging.AzureServiceBus;
+using IQ.Foundation.Messaging.MessageHandling;
 using Nancy;
 using System;
 using System.Collections.Generic;
@@ -8,26 +10,24 @@ using Nancy.ModelBinding;
 
 namespace ShippingService
 {
+	
+
 	/// <summary>
 	/// Responsible for obtaining a shipping cost given customer postal code, plus
 	/// the package's total size and weight.
 	/// </summary>
 	public class ShippingCostModule : NancyModule
 	{
-		private static Dictionary<Guid, ShippingCart> ShippingCarts; 
-
-		public static void Main(string[] args)
-		{
-			var servicebusBootstrapper = new DefaultAzureServiceBusBootstrapper(new CartServiceSubscriberConfiguration());
-
-			ShippingCarts = new Dictionary<Guid, ShippingCart>();
-		}
+		private static Dictionary<Guid, ShippingCart> ShippingCarts  = new Dictionary<Guid, ShippingCart>();
+		public static string lastMessage;
 
 
 		public ShippingCostModule()
 		{
+			lastMessage = "empty";
 			Nancy.StaticConfiguration.DisableErrorTraces = false;
 			Get["/cost"] = x => GetShippingCost();
+			Get["/"] = x => { return lastMessage; };
 		}
 
 		public object GetShippingCost()
@@ -53,5 +53,25 @@ namespace ShippingService
 	{
 		public string Currency { get; set; }
 		public decimal Cost { get; set; }
+	}
+
+	public class ProductAddedToCartMessageHandler : BaseMessageHandler<ProductAddedToCart>
+	{
+		public override void Handle(ProductAddedToCart message)
+		{
+			Console.WriteLine("message recieved" + message.ToString());
+
+			ShippingCostModule.lastMessage = "add " + message.ToString();
+		}
+	}
+
+	public class ProductRemovedFromCartMessageHandler : BaseMessageHandler<ProductRemovedFromCart>
+	{
+		public override void Handle(ProductRemovedFromCart message)
+		{
+			Console.WriteLine("message recieved" + message.ToString());
+
+			ShippingCostModule.lastMessage = "remove " + message.ToString();
+		}
 	}
 }
