@@ -27,9 +27,10 @@ namespace PaymentService
 		public object SubmitPayment()
 		{
 			var request = this.Bind<SubmitPaymentMessage>();
-			if (UnpaidCartDataStore.UnpaidCarts.ContainsKey(request.CartID))
+			if (UnpaidCartDataStore.GetAmount(request.CartID) != null)
 			{
 				PublishMessage(messagePublisher, new PaymentCompleteModel(request.CartID));
+				UnpaidCartDataStore.SetOrderAsPaid(request.CartID);
 				return Negotiate.WithStatusCode(HttpStatusCode.Created).WithReasonPhrase("Thank you for your payment.");
 			}
 			return Negotiate.WithStatusCode(HttpStatusCode.BadRequest).WithReasonPhrase("Cart does not exist");
